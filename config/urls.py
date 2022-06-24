@@ -37,4 +37,6 @@ urlpatterns = [
 
     path('ex/ajax', ex.views.ajax),
     path('ex/func1', ex.views.func1),
+
+    path('oauth/redirect/', user.views.getCode)
 ]
