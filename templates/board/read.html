@@ -12,7 +12,11 @@
                     <!-- Project details-->
                     <h2 class="text-uppercase">{{ post.title }}</h2>
                     <p class="item-intro text-muted">{{ post.writer }}</p>
-                    <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/1.jpg" alt="...">
+                    {% if post.postimage_set %}
+                    {% for postimage in post.postimage_set.all %}
+                        <img class="img-fluid d-block mx-auto" src="/media/{{ postimage.image }}" alt="...">
+                    {% endfor %}
+                    {% endif %}
                     <p>
                         {{ post.contents | safe }}
                     </p>

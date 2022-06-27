@@ -3,9 +3,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from board.forms import PostForm
-from board.models import Post
+from board.models import Post, PostImage
 from reply.forms import ReplyForm
-
 
 @login_required(login_url='/user/login')
 def like(request, bid):
@@ -32,12 +31,19 @@ def create(request):
             post = postForm.save(commit=False)
             post.writer = request.user
             post.save()
+            for image in request.FILES.getlist('image', None):
+                postImage = PostImage()
+                postImage.image = image
+                postImage.post = post
+                postImage.save()
+
         return redirect('/board/read/' + str(post.id))
 
 
 def list(request):
     posts = Post.objects.all().order_by('-id')
     context = {'posts': posts}
+    print(context)
     return render(request, 'board/list.html', context)
 
 
@@ -45,6 +51,7 @@ def read(request, bid):
     post = Post.objects.prefetch_related('reply_set').get(id=bid)
     replyForm = ReplyForm()
     context = {'post': post, 'replyForm': replyForm}
+    print(context)
     return render(request, 'board/read.html', context)
 
 

@@ -139,6 +139,9 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = 'user.User'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = secrets['EMAIL_HOST'],
 EMAIL_PORT = secrets['EMAIL_PORT'],
