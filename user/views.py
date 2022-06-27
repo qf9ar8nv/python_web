@@ -1,26 +1,26 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import logout, login
 import requests
 
-from user.models import User, AuthUser
+from user.models import User
 
-def logout(request):
-    auth_logout(request)
+def user_logout(request):
+    logout(request)
     return redirect('/user/login')
 
-def login(request):
+def user_login(request):
     if request.method == 'POST':
         loginForm = AuthenticationForm(request, request.POST)
 
         if loginForm.is_valid():
-            auth_login(request, loginForm.get_user())
+            login(request, loginForm.get_user())
             return redirect('/board/list')
         else:
             return redirect('/user/login')
     else:
         loginForm = AuthenticationForm()
-
     return render(request, 'user/login.html', {'loginForm': loginForm})
 
 # Create your views here.
@@ -58,14 +58,15 @@ def getCode(request):
     res = requests.get('https://kapi.kakao.com/v2/user/me', headers=headers)
     profile_json = res.json()
     kakao_id = profile_json['id']
-    auth_user = AuthUser.objects.filter(auth_user_id=kakao_id)
-    if auth_user.first() is not None:
-        print(1)
+    user = User.objects.filter(email=kakao_id)
+    print(user)
+    if user.first() is not None:
+        login(request, user.first(), backend='allauth.account.auth_backends.AuthenticationBackend')
     else:
-        auth_user = AuthUser()
-        print(type(kakao_id))
-        print(kakao_id)
-        auth_user.auth_user_id = kakao_id
-        auth_user.save()
+        user = User()
+        user.email = kakao_id
+        user.username = profile_json['properties']['nickname']
+        user.save()
+        login(request, user, backend='allauth.account.auth_backends.AuthenticationBackend')
 
-    return HttpResponse(1)
+    return redirect('/board/list')
