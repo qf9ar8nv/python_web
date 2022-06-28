@@ -19,15 +19,11 @@
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content"><i wclass="fas fa-plus fa-3x"></i></div>
                         </div>
-                        <img class="img-fluid" src="
                         {% if post.postimage_set %}
-                        {% for postimage in post.postimage_set.all %}
-                        /media/{{postimage.image }}
-                        {% endfor %}
-                        {% else %}
-                        {% static 'assets/img/portfolio/1.jpg '%}
+                            {% for postimage in post.postimage_set.all %}
+                                <img class="img-fluid" src="/media/{{postimage.image}}" alt="..."/>
+                            {% endfor %}
                         {% endif %}
-                        " alt="..."/>
                     </a>
                     <div class="portfolio-caption">
                         <div class="portfolio-caption-heading">{{ post.title }}</div>

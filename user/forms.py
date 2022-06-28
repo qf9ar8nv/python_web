@@ -1,12 +1,15 @@
 from django import forms
-from user.models import User, AuthUser
+from django.contrib.auth.forms import UserCreationForm
+from allauth.account.forms import SignupForm
 
-class UserForm(forms.ModelForm):
+from user.models import User
+
+class UserForm(UserCreationForm):
     class Meta:
         model = User
-        field = ('user_id', 'email', )
+        fields = ('email', 'password1', 'password2', )
 
-class AuthUserForm(forms.ModelForm):
-    class Meta:
-        model = AuthUser
-        field = ('auth_user_id', )
+class CustomSignupForm(SignupForm):
+    def save(self, request):
+        user = super(CustomSignupForm, self).save(request)
+        return user

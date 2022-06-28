@@ -50,17 +50,44 @@
             <div class="text-center">
                 <h3 class="section-subheading text-muted"></h3>
             </div>
-            <ul class="timeline">
-                {% for reply in post.reply_set.all %}
-                <li class="timeline-inverted">
+            {% for reply in post.reply_set.all %}
+            <div>
 
-                    <div class="timeline-panel">
-                        <div class="timeline-body"><p class="text-muted">{{reply.contents}}</p></div>
-                    </div>
-                </li>
-                {% endfor %}
+                <p class="text-muted">작성자: {{ reply.writer }}</p>
+                <p class="text-muted">내용: {{ reply.contents }}
+                    {% if request.user == reply.writer %}
+                    <a href="/reply/update/{{ reply.id }}/{{ post.id }}" class="btn btn-primary">수정</a>
+                    <a href="/reply/delete/{{ reply.id }}/{{ post.id }}" class="btn btn-primary">삭제</a>
+                    {% endif %}
+                </p>
+                <div class="portfolio-caption-heading" onclick="sendRequest({{ reply.id }}, this)">
+                {% if request.user in reply.like.all %}
+                    ♥  {{ reply.like.count }}
+                {% else %}
+                    ♡  {{ reply.like.count }}
+                {% endif %}
+                </div>
+            </div>
 
-            </ul>
+            {% endfor %}
+            <script>
+                            function sendRequest(bid, event) {
+                                var httpRequest = new XMLHttpRequest();
+                                httpRequest.onreadystatechange = function() {
+                                    if (httpRequest.readyState == XMLHttpRequest.DONE && httpRequest.status == 200 ) {
+                                        var json_data = JSON.parse(httpRequest.responseText);
+                                        if (json_data['message']=='added') {
+                                            event.innerText = "♥"+" "+json_data['like_cnt'];
+                                        } else {
+                                            event.innerText = "♡"+" "+json_data['like_cnt'];
+                                        }
+                                    }
+                                };
+                                // GET 방식으로 요청을 보내면서 데이터를 동시에 전달함.
+                                httpRequest.open("GET", "/reply/like/"+bid, true);
+                                httpRequest.send();
+                            }
+                        </script>
         </div>
 
 

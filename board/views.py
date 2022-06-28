@@ -43,7 +43,6 @@ def create(request):
 def list(request):
     posts = Post.objects.all().order_by('-id')
     context = {'posts': posts}
-    print(context)
     return render(request, 'board/list.html', context)
 
 
@@ -51,7 +50,6 @@ def read(request, bid):
     post = Post.objects.prefetch_related('reply_set').get(id=bid)
     replyForm = ReplyForm()
     context = {'post': post, 'replyForm': replyForm}
-    print(context)
     return render(request, 'board/read.html', context)
 
 

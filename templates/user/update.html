@@ -1,0 +1,13 @@
+<form method="post">
+    {% csrf_token %}
+    user_name : <input type="text" name="user_name" value="{{user_name}}"><br>
+    <button type="submit" formmethod="POST">수정하기</button>
+    <button type="button" onclick="location.href='/accounts/profile/'">취소하기</button>
+</form>
+
+
+</br></br></br></br></br></br>
+<form method="post" action="/user/withdrawal" >
+    {% csrf_token %}
+    <button type="submit">탈퇴하기</button>
+</form>

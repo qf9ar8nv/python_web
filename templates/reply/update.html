@@ -1,0 +1,6 @@
+<form method="post">
+    {% csrf_token %}
+    내용 : <input type="text" name="contents" value="{{ reply.contents }}"><br>
+    <button type="submit">수정하기</button>
+    <button type="button" onclick="location.href='/board/read/{{ reply.post_id}}'">취소하기</button>
+</form>

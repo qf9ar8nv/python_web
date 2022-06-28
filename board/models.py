@@ -9,5 +9,5 @@ class Post(models.Model):
     like = models.ManyToManyField(User, related_name='likes', blank=True)
 
 class PostImage(models.Model):
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
+    image = models.ImageField(upload_to='images/post/', blank=True, null=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

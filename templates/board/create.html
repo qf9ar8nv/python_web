@@ -6,13 +6,14 @@
 <!-- Portfolio Grid-->
 <section class="page-section bg-light" id="portfolio">
     <div class="container">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <!-- Name input-->
                 <input name="title" placeholder="제목을 입력해주세요." class="form-control" type="text">
             </div>
             <br/>
+            <input multiple type="file" name="image" accept="image/*" id="id_image" >
 
             <textarea name="contents" id="summernote"></textarea>
             <br/>
